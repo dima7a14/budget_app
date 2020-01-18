@@ -1,9 +1,15 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Buefy from 'buefy';
+import 'buefy/dist/buefy.css';
 
 import Home from '../views/Home.vue';
 
 Vue.use(VueRouter);
+Vue.use(Buefy, {
+  defaultIconPack: 'fas',
+  defaultContainerElement: '#app',
+});
 
 const routes = [
   {
