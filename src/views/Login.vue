@@ -1,8 +1,6 @@
 <template>
   <div>
-    <h1>Family Budget App</h1>
-    <hr />
-    <h5>Home page</h5>
+    <h1>Login page</h1>
   </div>
 </template>
 
@@ -10,3 +8,7 @@
 export default {
 };
 </script>
+
+<style scoped>
+
+</style>
