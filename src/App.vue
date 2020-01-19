@@ -1,16 +1,31 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/login">Login</router-link> |
-      <router-link to="/registration">Registration</router-link> |
-      <router-link to="/transactions">System</router-link>
-    </div>
+    <fb-header></fb-header>
     <router-view/>
   </div>
 </template>
 
+<script lang="ts">
+import Vue from 'vue';
+import Buefy from 'buefy';
+import 'buefy/dist/buefy.css';
+
+import Header from './components/Header.vue';
+
+Vue.use(Buefy, {
+  defaultIconPack: 'fas',
+  defaultContainerElement: '#app',
+});
+
+export default {
+  components: {
+    'fb-header': Header,
+  },
+};
+</script>
+
 <style lang="scss">
+@import "./theme/fonts";
 @import "./theme/variables";
 
 #app {
