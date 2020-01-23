@@ -12,7 +12,7 @@
       <b-navbar-item tag="div" class="buttons">
         <b-button
           tag="router-link"
-          :to="$route.name === 'transactions' ? '/transactions' : $route.path"
+          to="/transactions"
           icon-left="wallet"
           type="is-dark"
           size="large"
@@ -21,9 +21,9 @@
         >
           Transactions
         </b-button>
-        <b-button
+        <fb-button
           tag="router-link"
-          :to="$route.name === 'tasks' ? '/tasks' : $route.path"
+          to="tasks"
           icon-left="list-alt"
           type="is-dark"
           size="large"
@@ -32,10 +32,10 @@
           :inverted="$route.name === 'tasks'"
         >
           Tasks
-        </b-button>
-        <b-button
+        </fb-button>
+        <fb-button
           tag="router-link"
-          :to="$route.name === 'statistics' ? '/statistics' : $route.name"
+          to="statistics"
           icon-left="chart-area"
           type="is-dark"
           size="large"
@@ -44,7 +44,7 @@
           :inverted="$route.name === 'statistics'"
         >
           Statistics
-        </b-button>
+        </fb-button>
       </b-navbar-item>
       <b-navbar-dropdown label="Settings">
         <b-navbar-item tag="router-link" :to="{ path: '/settings/user' }">
@@ -62,8 +62,13 @@
 </template>
 
 <script lang="ts">
+import Button from './Button.vue';
+
 export default {
   name: 'Header',
+  components: {
+    'fb-button': Button,
+  },
 };
 </script>
 
