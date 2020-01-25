@@ -1,6 +1,0 @@
-@import '~@blueprintjs/core/lib/scss/variables';
-
-.header {
-  composes: bp3-navbar from global;
-  background-color: $light-gray4;
-}

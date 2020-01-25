@@ -5,21 +5,34 @@ import {
   NavbarDivider,
   NavbarHeading,
   ButtonGroup,
-  Button
+  Button,
+  Popover,
+  Classes,
 } from '@blueprintjs/core';
+import classNames from 'classnames';
 
-import styles from './styles.module.scss';
+import Menu from './Menu';
+import { useStyles } from './styles';
 
 const Header: React.FC = () => {
+  const classes = useStyles();
+
   return (
-    <Navbar className={styles.header} fixedToTop>
+    <Navbar className={classes.header} fixedToTop>
       <NavbarGroup align="left">
         <NavbarHeading>Family Budget App</NavbarHeading>
         <NavbarDivider />
+        Balance:
+        <h5 className={classNames(Classes.MONOSPACE_TEXT, Classes.TEXT_LARGE, classes.balance)}>$250</h5>
       </NavbarGroup>
       <NavbarGroup align="right">
-        <ButtonGroup fill large>
+        <ButtonGroup large>
           <Button icon="th" text="Transactions" />
+          <Button icon="form" text="Tasks" disabled />
+          <Button icon="timeline-area-chart" text="Statistics" disabled />
+          <Popover content={<Menu />}>
+            <Button icon="cog" />
+          </Popover>
         </ButtonGroup>
       </NavbarGroup>
     </Navbar>
