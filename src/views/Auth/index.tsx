@@ -20,8 +20,8 @@ const Auth: React.FC = () => {
     <DefaultLayout>
       <CSSTransition
         in={openedForm === EForms.signIn}
-        timeout={500}
-        unmountOnExit
+        timeout={1000}
+        unmountOnExit={false}
         classNames={{
           enter: classes.formEnter,
           enterActive: classes.formEnterActive,
@@ -29,7 +29,7 @@ const Auth: React.FC = () => {
           exitActive: classes.formExitActive,
         }}
       >
-        <SignInForm toggle={() => setOpenedForm(EForms.signUp)} />
+        <SignInForm className={classes.form} toggle={() => setOpenedForm(openedForm === EForms.signIn ? EForms.signUp : EForms.signIn)} />
       </CSSTransition>
       {/* <CSSTransition
         in={openedForm === EForms.signUp}

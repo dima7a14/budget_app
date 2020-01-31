@@ -1,18 +1,20 @@
 import React from 'react';
 import { FormGroup, InputGroup, Button } from '@blueprintjs/core';
+import classNames from 'classnames';
 
 import { useStyles } from './styles';
 
 interface IProps {
-  toggle?(): void;
+  className?: string;
+  toggle(): void;
 }
 
 const SignUpForm: React.FC<IProps> = props => {
-  const { toggle } = props;
+  const { toggle, className } = props;
   const classes = useStyles();
 
   return (
-    <section className={classes.container}>
+    <section className={classNames(classes.container, className)}>
       <header className={classes.header}>
         <h3 className={classes.title}>Sign Up</h3>
       </header>

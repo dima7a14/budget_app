@@ -31,18 +31,26 @@ export const useStyles = createUseStyles({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  form: {
+    transformStyle: 'preserve-3d',
+    transition: 'all 1000ms',
+  },
   formEnter: {
-    opacity: 0,
+    // opacity: 0,
+    transform: 'rotateY(0)',
   },
   formEnterActive: {
-    opacity: 1,
-    transition: 'opacity 200ms',
+    // opacity: 1,
+    transform: 'rotateY(0)',
+    
   },
   formExit: {
-    opacity: 1,
+    // opacity: 1,
+    transform: 'rotateY(180deg)',
   },
   formExitActive: {
-    opacity: 0,
-    transition: 'opacity 200ms',
+    // opacity: 0,
+    tranform: 'rotateY(180deg)',
+    transition: 'all 1000ms',
   },
 });
