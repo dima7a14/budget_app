@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FormGroup, InputGroup, Button } from '@blueprintjs/core';
 import classNames from 'classnames';
 
@@ -12,6 +12,13 @@ interface IProps {
 const SignUpForm: React.FC<IProps> = props => {
   const { toggle, className } = props;
   const classes = useStyles();
+  const firstInputEl = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (firstInputEl.current) {
+      firstInputEl.current.focus();
+    }
+  });
 
   return (
     <section className={classNames(classes.container, className)}>
@@ -23,7 +30,13 @@ const SignUpForm: React.FC<IProps> = props => {
           label="Full name"
           className={classes.formGroup}
         >
-          <InputGroup leftIcon="person" type="text" large />
+          <InputGroup
+            leftIcon="person"
+            type="text"
+            large
+            // @ts-ignore TODO: maybe problem in library type.
+            inputRef={firstInputEl}
+          />
         </FormGroup>
         <FormGroup
           label="E-mail"

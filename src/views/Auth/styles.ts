@@ -1,9 +1,13 @@
 import { Colors } from '@blueprintjs/core';
 import { createUseStyles } from 'react-jss';
 
+const transition = 'all 1000ms';
+const slide = '100px';
+const formWidth = 320;
+
 export const useStyles = createUseStyles({
   container: {
-    minWidth: 320,
+    width: formWidth,
     border: `1px solid ${Colors.LIGHT_GRAY1}`,
     borderRadius: 10,
     backgroundColor: Colors.WHITE,
@@ -31,26 +35,51 @@ export const useStyles = createUseStyles({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  form: {
+  forms: {
     transformStyle: 'preserve-3d',
-    transition: 'all 1000ms',
+    position: 'relative',
+    width: '100%',
+    height: '100%',
   },
-  formEnter: {
-    // opacity: 0,
-    transform: 'rotateY(0)',
+  form: {
+    position: 'absolute',
+    left: `calc(50% - ${formWidth / 2}px)`,
+    top: '20%',
   },
-  formEnterActive: {
-    // opacity: 1,
-    transform: 'rotateY(0)',
-    
+  signInEnter: {
+    opacity: 0,
+    transform: `translate(-${slide})`,
   },
-  formExit: {
-    // opacity: 1,
-    transform: 'rotateY(180deg)',
+  signInEnterActive: {
+    opacity: 1,
+    transform: 'translate(0)',
+    transition,
   },
-  formExitActive: {
-    // opacity: 0,
-    tranform: 'rotateY(180deg)',
-    transition: 'all 1000ms',
+  signInExit: {
+    opacity: 1,
+    transform: 'translate(0)',
+  },
+  signInExitActive: {
+    opacity: 0,
+    transform: `translate(-${slide})`,
+    transition,
+  },
+  signUpEnter: {
+    opacity: 0,
+    transform: `translate(${slide})`,
+  },
+  signUpEnterActive: {
+    opacity: 1,
+    transform: 'translate(0)',
+    transition,
+  },
+  signUpExit: {
+    opacity: 1,
+    transform: 'translate(0)',
+  },
+  signUpExitActive: {
+    opacity: 0,
+    transform: `translate(${slide})`,
+    transition,
   },
 });

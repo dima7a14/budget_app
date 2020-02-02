@@ -14,8 +14,10 @@ export const useStyles = createUseStyles({
     flexGrow: 1,
     overflow: 'auto',
     margin: 'auto',
+    width: '100%',
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   footer: {
     backgroundColor: Colors.DARK_GRAY2,
