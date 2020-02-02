@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { CSSTransition } from 'react-transition-group';
+import { useLocation } from 'react-router-dom';
+
+import { paths } from 'router';
 
 import DefaultLayout from 'layouts/Default';
 
@@ -7,24 +10,20 @@ import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import { useStyles } from './styles';
 
-enum EForms {
-  signIn = 'sign_in',
-  signUp = 'sign_up',
-}
 
+// TODO: add Formik
+
+/** Component */
 const Auth: React.FC = () => {
-  const [openedForm, setOpenedForm] = useState<EForms>(EForms.signIn);
   const classes = useStyles();
+  const location = useLocation();
 
   return (
     <>
-      <div>
-        <button onClick={() => setOpenedForm(openedForm === EForms.signIn ? EForms.signUp : EForms.signIn)}>toggle</button>
-      </div>
       <DefaultLayout>
         <div className={classes.forms}>
           <CSSTransition
-            in={openedForm === EForms.signIn}
+            in={location.pathname === paths.signIn.path}
             timeout={1000}
             unmountOnExit
             classNames={{
@@ -34,10 +33,10 @@ const Auth: React.FC = () => {
               exitActive: classes.signInExitActive,
             }}
           >
-            <SignInForm className={classes.form} toggle={() => setOpenedForm(EForms.signUp)} />
+            <SignInForm className={classes.form} />
           </CSSTransition>
           <CSSTransition
-            in={openedForm === EForms.signUp}
+            in={location.pathname === paths.signUp.path}
             timeout={500}
             unmountOnExit
             classNames={{
@@ -47,7 +46,7 @@ const Auth: React.FC = () => {
               exitActive: classes.signUpExitActive,
             }}
           >
-            <SignUpForm className={classes.form} toggle={() => setOpenedForm(EForms.signIn)} />
+            <SignUpForm className={classes.form} />
           </CSSTransition>
         </div>
       </DefaultLayout>

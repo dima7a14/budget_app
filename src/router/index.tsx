@@ -40,10 +40,7 @@ export const Routes: React.FC = () => (
     <Route path={paths.home.path} exact>
       <Home />
     </Route>
-    <Route path={paths.signIn.path}>
-      <Auth />
-    </Route>
-    <Route path={paths.signUp.path}>
+    <Route path={[paths.signIn.path, paths.signUp.path]}>
       <Auth />
     </Route>
     <Route path={paths.transactions.path}>

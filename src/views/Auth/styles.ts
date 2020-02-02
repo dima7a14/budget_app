@@ -34,6 +34,10 @@ export const useStyles = createUseStyles({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  linkText: {
+    margin: '0 .5em',
   },
   forms: {
     transformStyle: 'preserve-3d',

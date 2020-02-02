@@ -1,16 +1,23 @@
 import React, { useEffect, useRef } from 'react';
-import { FormGroup, InputGroup, Button } from '@blueprintjs/core';
+import { Link } from 'react-router-dom';
+import {
+  FormGroup,
+  InputGroup,
+  Button,
+  Icon,
+} from '@blueprintjs/core';
 import classNames from 'classnames';
+
+import { paths } from 'router';
 
 import { useStyles } from './styles';
 
 interface IProps {
   className?: string;
-  toggle(): void;
 }
 
 const SignInForm: React.FC<IProps> = props => {
-  const { toggle, className } = props;
+  const { className } = props;
   const classes = useStyles();
   const firstInputEl = useRef<HTMLInputElement>(null);
 
@@ -18,7 +25,7 @@ const SignInForm: React.FC<IProps> = props => {
     if (firstInputEl.current) {
       firstInputEl.current.focus();
     }
-  });
+  }, []);
 
   return (
     <section className={classNames(classes.container, className)}>
@@ -46,7 +53,10 @@ const SignInForm: React.FC<IProps> = props => {
         </FormGroup>
         <div className={classes.buttons}>
           <Button text="Submit" large intent="primary" />
-          <Button text="Sign Up" large rightIcon="arrow-right" onClick={toggle} />
+          <Link to={paths.signUp.path}>
+            <span className={classes.linkText}>Sign Up</span>
+            <Icon icon="arrow-right" />
+          </Link>
         </div>
       </div>
     </section>
