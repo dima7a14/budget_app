@@ -1,6 +1,15 @@
 import React from 'react';
 
+import DefaultLayout from 'layouts/Default';
 
-const Transactions: React.FC = () => <div>Transactions</div>;
+import Table from './Table';
+
+const Transactions: React.FC = () => {
+  return (
+    <DefaultLayout>
+      <Table />
+    </DefaultLayout>
+  );
+};
 
 export default Transactions;
