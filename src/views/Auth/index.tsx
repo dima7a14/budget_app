@@ -1,8 +1,8 @@
 import React from 'react';
-import { CSSTransition } from 'react-transition-group';
-import { useLocation } from 'react-router-dom';
+// import { CSSTransition } from 'react-transition-group';
+// import { useLocation } from 'react-router-dom';
 
-import { paths } from 'router';
+// import routes from 'router/routes';
 
 // import DefaultLayout from 'layouts/Default';
 
