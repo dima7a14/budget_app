@@ -4,11 +4,9 @@
   "private": true,
   "homepage": "http://dima7a14.github.io/budget_app",
   "dependencies": {
-    "@blueprintjs/core": "^3.23.1",
-    "@blueprintjs/datetime": "^3.15.2",
-    "@blueprintjs/icons": "^3.13.0",
-    "@blueprintjs/select": "^3.11.2",
-    "@blueprintjs/table": "^3.8.3",
+    "@material-ui/core": "^4.9.3",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/styles": "^4.9.0",
     "classnames": "^2.2.6",
     "currency-codes": "^2.0.0",
     "currency-symbol-map": "^4.0.4",
@@ -16,7 +14,6 @@
     "moment": "^2.24.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-jss": "^10.0.3",
     "react-router-dom": "^5.1.2",
     "react-transition-group": "^4.3.0"
   },

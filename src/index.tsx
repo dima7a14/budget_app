@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 
 import App from 'layouts/App';
 import * as serviceWorker from './serviceWorker';
-import 'theme/styles.scss';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
