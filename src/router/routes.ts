@@ -7,26 +7,26 @@ export default {
   signIn: {
     name: 'signIn',
     path: '/sign-in',
-    title: 'Home page'
+    title: 'Sign In'
   },
   signUp: {
     name: 'signUp',
     path: '/sign-up',
-    title: 'Home page'
+    title: 'Sign Up'
+  },
+  accounts: {
+    name: 'accounts',
+    path: '/accounts',
+    title: 'Accounts',
   },
   transactions: {
     name: 'transactions',
     path: '/transactions',
-    title: 'Home page'
+    title: 'Transactions'
   },
-  tasks: {
-    name: 'tasks',
-    path: '/tasks',
-    title: 'Home page'
-  },
-  statistics: {
-    name: 'statistics',
-    path: '/statistics',
-    title: 'Home page'
+  reports: {
+    name: 'reports',
+    path: '/reports',
+    title: 'Reports'
   }
 };
