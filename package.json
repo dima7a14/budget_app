@@ -11,6 +11,8 @@
     "classnames": "^2.2.6",
     "currency-codes": "^2.0.0",
     "currency-symbol-map": "^4.0.4",
+    "effector": "^20.12.1",
+    "effector-react": "^20.6.2",
     "gh-pages": "^2.2.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
