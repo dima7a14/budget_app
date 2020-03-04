@@ -6,6 +6,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Avatar from '@material-ui/core/Avatar';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import routes from 'router/routes';
 
@@ -16,7 +19,10 @@ const SignUp: React.FC = () => {
   const classes = useStyles();
 
   return (
-    <>
+    <Paper elevation={4} className={classes.paper}>
+      <Avatar className={classes.signUpAvatar}>
+        <AccountCircleIcon />
+      </Avatar>
       <Typography component="h2" variant="h5">
         Sign up
       </Typography>
@@ -71,7 +77,7 @@ const SignUp: React.FC = () => {
           </Grid>
         </Grid>
       </form>
-    </>
+    </Paper>
   );
 };
 
