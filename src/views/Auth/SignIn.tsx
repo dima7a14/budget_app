@@ -1,4 +1,5 @@
 import React from 'react';
+import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -12,11 +13,22 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import routes from 'router/routes';
 
+import api from 'controllers/api';
+
 import { useStyles } from './styles';
 
 
 const SignIn: React.FC = () => {
   const classes = useStyles();
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    onSubmit: ({ email, password }) => {
+      api.auth.login(email, password);
+    },
+  });
 
   return (
     <Paper elevation={4} className={classes.paper}>
@@ -26,7 +38,7 @@ const SignIn: React.FC = () => {
       <Typography component="h2" variant="h5">
         Sign in
       </Typography>
-      <form className={classes.form} noValidate>
+      <form className={classes.form} onSubmit={formik.handleSubmit}>
         <TextField
           variant="outlined"
           margin="normal"
@@ -37,6 +49,8 @@ const SignIn: React.FC = () => {
           name="email"
           autoComplete="email"
           autoFocus
+          onChange={formik.handleChange}
+          value={formik.values.email}
         />
         <TextField
           variant="outlined"
@@ -48,6 +62,8 @@ const SignIn: React.FC = () => {
           type="password"
           id="password"
           autoComplete="current-password"
+          onChange={formik.handleChange}
+          value={formik.values.password}
         />
         <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
         <Button

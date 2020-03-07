@@ -12,8 +12,6 @@ const Auth: React.FC = () => {
   const location = useLocation();
   const classes = useStyles();
 
-  console.log('path', location.pathname)
-
   return (
     <div className={classes.forms}>
       <CSSTransition

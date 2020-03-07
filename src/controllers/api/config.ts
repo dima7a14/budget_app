@@ -3,7 +3,7 @@ export function getPath() {
 
   switch (process.env.REACT_APP_API_ENV) {
     case 'local': {
-      address = 'localhost:8000';
+      address = 'http://localhost:8000';
       break;
     }
     default: {

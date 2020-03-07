@@ -4,10 +4,12 @@ import { camelizeKeys, decamelizeKeys } from 'humps';
 
 import { getPath } from './config';
 
+import Auth from './resources/auth';
+
 
 interface IAPI {
   // TODO: add other resources.
-  // auth: Auth;
+  auth: Auth;
   // user: User;
   // account: Account;
   // category: Category;
@@ -20,12 +22,15 @@ class API implements IAPI {
   private baseURL: string;
   instance: AxiosInstance;
 
+  auth: Auth;
+
   constructor() {
     this.baseURL = getPath();
     this.instance = axios.create({ baseURL: this.baseURL });
 
     this.prepareInstance();
 
+    this.auth = new Auth(this.instance);
     // TODO: Init other resources...
   }
 
