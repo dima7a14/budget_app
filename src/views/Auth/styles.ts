@@ -25,7 +25,6 @@ export const useStyles = makeStyles(theme => ({
   },
   form: {
     marginTop: theme.spacing(1),
-    
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -80,5 +79,18 @@ export const useStyles = makeStyles(theme => ({
     opacity: 0,
     transform: `translate(${slide})`,
     transition,
+  },
+  overlay: {
+    width: '100%',
+    height: '100%',
+    zIndex: 2,
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.75)',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 }));

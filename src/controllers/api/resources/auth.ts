@@ -2,12 +2,12 @@ import { AxiosInstance } from 'axios';
 import { IResource, IBaseError, handleError } from '../common';
 
 
-interface ITokens {
+export interface ITokens {
   refresh: string;
   access: string;
 }
 
-interface IRegisterError {
+export interface IRegisterError {
   email?: string[];
   firstName?: string[];
   lastName?: string[];
@@ -33,7 +33,7 @@ class Auth implements IResource {
 
       return data;
     } catch (err) {
-      return handleError<IBaseError>(err);
+      handleError<IBaseError>(err);
     }
   }
 
@@ -43,7 +43,7 @@ class Auth implements IResource {
 
       this.instance.defaults.headers.common.Authorization = '';
     } catch (err) {
-      return handleError(err);
+      handleError(err);
     }
   }
 
@@ -51,7 +51,7 @@ class Auth implements IResource {
     try {
       await this.instance.post(`${this.prefix}/register/`, { email, password, firstName, lastName });
     } catch (err) {
-      return handleError<IRegisterError>(err);
+      handleError<IRegisterError>(err);
     }
   }
 
@@ -61,7 +61,7 @@ class Auth implements IResource {
 
       return data;
     } catch (err) {
-      return handleError(err);
+      handleError(err);
     }
   }
 }

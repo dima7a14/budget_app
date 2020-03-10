@@ -10,28 +10,39 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Fade from '@material-ui/core/Fade';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import routes from 'router/routes';
-
-import api from 'controllers/api';
 
 import { useStyles } from './styles';
 
 
-const SignIn: React.FC = () => {
+interface IProps {
+  loading: boolean;
+  onSubmit(params: { email: string, password: string }): any;
+}
+
+const SignIn: React.FC<IProps> = ({ loading, onSubmit }) => {
   const classes = useStyles();
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
-    onSubmit: ({ email, password }) => {
-      api.auth.login(email, password);
-    },
+    onSubmit,
   });
 
   return (
     <Paper elevation={4} className={classes.paper}>
+      <Fade
+        in={loading}
+        timeout={500}
+      >
+        <div className={classes.overlay}>
+          <CircularProgress />
+        </div>
+      </Fade>
       <Avatar className={classes.signInAvatar}>
         <LockOutlinedIcon />
       </Avatar>

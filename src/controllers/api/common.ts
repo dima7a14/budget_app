@@ -10,9 +10,8 @@ export function handleError<F extends {}>(error: any) {
 
       return data as F;
     }
-
-    throw error;
   }
+  throw error;
 }
 
 // Common error interfaces
