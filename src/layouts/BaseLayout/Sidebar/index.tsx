@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useStoreMap } from 'effector-react';
 import classNames from 'classnames';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -16,6 +17,9 @@ import ViewCompactIcon from '@material-ui/icons/ViewCompact';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 import routes from 'router/routes';
+
+import { user } from 'stores/global';
+
 import { useStyles } from './styles';
 
 
@@ -49,6 +53,19 @@ const Sidebar: React.FC<IProps> = ({ open, onToggle }) => {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
+  const { firstName, lastName, isAuthenticated } = useStoreMap({
+    store: user.$store,
+    keys: [],
+    fn: u => ({
+      firstName: u.firstName,
+      lastName: u.lastName,
+      isAuthenticated: Boolean(u.id),
+    }),
+  });
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <Drawer
@@ -59,7 +76,8 @@ const Sidebar: React.FC<IProps> = ({ open, onToggle }) => {
       }}
     >
       <div className={classes.toolbar}>
-        <Avatar className={classes.avatar}>U</Avatar>
+      <Avatar className={classes.avatar}>{firstName[0]}{lastName[0]}</Avatar>
+        {firstName} {lastName}
         <IconButton onClick={onToggle}>
           <ChevronLeftIcon />
         </IconButton>

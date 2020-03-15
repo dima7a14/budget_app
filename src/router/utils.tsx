@@ -11,7 +11,7 @@ export const PrivateRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
   const isAuthenticated = useStoreMap({
     store: user.$store,
     keys: [],
-    fn: (u, []) => !!u.token,
+    fn: (u, []) => !!u.refreshToken,
   });
 
   return (
@@ -22,6 +22,25 @@ export const PrivateRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
           to={{ pathname: routes.signIn.path, state: { from: location } }}
         />
       )}
+    />
+  );
+};
+
+export const NotAuthenticatedRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
+  const isAuthenticated = useStoreMap({
+    store: user.$store,
+    keys: [],
+    fn: u => !!u.refreshToken,
+  });
+
+  return (
+    <Route
+      {...rest}
+      render={({ location }) => isAuthenticated ? (
+        <Redirect
+          to={{ pathname: routes.transactions.path, state: { from: location } }}
+        />
+      ) : children}
     />
   );
 };
