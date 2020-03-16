@@ -9,32 +9,50 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
+import Fade from '@material-ui/core/Fade';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import routes from 'router/routes';
 
-import api from 'controllers/api';
-
 import { useStyles } from './styles';
 
 
-const SignUp: React.FC = () => {
+interface IProps {
+  loading: boolean;
+  onSubmit(params: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+  }): any;
+}
+
+const SignUp: React.FC<IProps> = ({ loading, onSubmit }) => {
   const classes = useStyles();
   const formik = useFormik({
     initialValues: {
-      username: '',
+      userName: '',
       email: '',
       password: '',
     },
-    onSubmit: ({ username, email, password }) => {
-      const [firstName, lastName] = username.split(' ');
+    onSubmit: ({ userName, email, password }) => {
+      const [firstName, lastName] = userName.split(' ');
 
-      api.auth.register(email, password, firstName, lastName);
+      onSubmit({ email, password, firstName, lastName });
     },
   });
 
   return (
     <Paper elevation={4} className={classes.paper}>
+      <Fade
+        in={loading}
+        timeout={500}
+      >
+        <div className={classes.overlay}>
+          <CircularProgress />
+        </div>
+      </Fade>
       <Avatar className={classes.signUpAvatar}>
         <AccountCircleIcon />
       </Avatar>
@@ -47,12 +65,12 @@ const SignUp: React.FC = () => {
           margin="normal"
           required
           fullWidth
-          id="username"
+          id="userName"
           label="Username"
-          name="username"
+          name="userName"
           autoComplete="username"
           autoFocus
-          value={formik.values.username}
+          value={formik.values.userName}
           onChange={formik.handleChange}
         />
         <TextField

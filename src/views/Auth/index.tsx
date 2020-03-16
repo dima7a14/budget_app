@@ -6,6 +6,7 @@ import { useStoreMap } from 'effector-react';
 import routes from 'router/routes';
 
 import { user } from 'stores/global';
+import { IRegisterData } from 'stores/global/user';
 
 import SignIn from './SignIn';
 import SignUp from './SignUp';
@@ -21,6 +22,10 @@ const Auth: React.FC = () => {
   });
   const login = useCallback(async (params: { email: string, password: string }) => {
     await user.api.login(params);
+    await user.api.get();
+  }, []);
+  const register = useCallback(async (params: IRegisterData) => {
+    await user.api.register(params);
     await user.api.get();
   }, []);
 
@@ -50,7 +55,7 @@ const Auth: React.FC = () => {
           exitActive: classes.signUpExitActive,
         }}
       >
-        <SignUp />
+        <SignUp loading={isLoading} onSubmit={register} />
       </CSSTransition>
     </div>
   );

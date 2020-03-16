@@ -29,6 +29,13 @@ const initialUser: IUser = {
   refreshToken: '',
 };
 
+export interface IRegisterData {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}
+
 export interface IUpdateData extends IApiUpdateData {
   id: number;
 }
@@ -49,6 +56,16 @@ export function createUserApi(initial: IUser = initialUser) {
   const logoutFx = createEffect<{ refresh: string }, void, Error>('Logout user', {
     handler: async ({ refresh }) => {
       await api.auth.logout(refresh);
+    },
+  });
+
+  const registerFx = createEffect<IRegisterData, ITokens | undefined, IRegisterError>('Register user', {
+    handler: async ({ email, password, firstName, lastName }) => {
+      await api.auth.register(email, password, firstName, lastName);
+
+      const tokens = await api.auth.login(email, password);
+
+      return tokens;
     },
   });
 
@@ -81,9 +98,23 @@ export function createUserApi(initial: IUser = initialUser) {
 
       return state;
     })
+
     .on(logoutFx.pending, (state, loading) => ({ ...state, loading }))
-    .on(logoutFx.done, (state) => initial)
-    .on(logoutFx.fail, (state) => initial)
+    .on(logoutFx.done, () => initial)
+    .on(logoutFx.fail, () => initial)
+
+    .on(registerFx.pending, (state, loading) => ({ ...state, loading }))
+    .on(registerFx.done, (state, { result }) => {
+      if (typeof result !== 'undefined') {
+        return { ...state, accessToken: result.access, refreshToken: result.refresh };
+      }
+    })
+    .on(registerFx.fail, (state, { error }) => {
+      console.log(error);
+
+      return state;
+    })
+
     .on(detailFx.pending, (state, loading) => ({ ...state, loading }))
     .on(detailFx.done, (state, { result }) => {
       if (typeof result !== 'undefined') {
@@ -95,6 +126,7 @@ export function createUserApi(initial: IUser = initialUser) {
 
       return state;
     })
+
     .on(updateFx.pending, (state, loading) => ({ ...state, loading }))
     .on(updateFx.done, (state, { result }) => {
       if (typeof result !== 'undefined') {
@@ -112,6 +144,7 @@ export function createUserApi(initial: IUser = initialUser) {
     api: {
       login: loginFx,
       logout: logoutFx,
+      register: registerFx,
       get: detailFx,
       update: updateFx,
     },
