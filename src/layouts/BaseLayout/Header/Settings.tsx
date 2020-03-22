@@ -21,10 +21,6 @@ const SettingsButton: React.FC = () => {
   const history = useHistory();
   const userStore = useStore(user.$store);
   const isAuthenticated = Boolean(userStore.refreshToken);
-  const logout = useCallback(async () => {
-    await user.api.logout({ refresh: userStore.refreshToken });
-    history.push(routes.signIn.path);
-  }, [userStore.refreshToken]);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -32,7 +28,15 @@ const SettingsButton: React.FC = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const toProfile = () => {
+    history.push(routes.profile.path);
+    handleClose();
+  };
+  const logout = useCallback(async () => {
+    await user.api.logout({ refresh: userStore.refreshToken });
+    history.push(routes.signIn.path);
+    handleClose();
+  }, [userStore.refreshToken]);
 
   if (!isAuthenticated) {
     return null;
@@ -54,13 +58,13 @@ const SettingsButton: React.FC = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem button divider>
+        <MenuItem button divider onClick={toProfile}>
           <ListItemIcon>
             <AccountCircleIcon />
           </ListItemIcon>
-          <Typography variant="inherit" align="right">Account details</Typography>
+          <Typography variant="inherit" align="right">Profile details</Typography>
         </MenuItem>
-        <MenuItem button>
+        <MenuItem button onClick={logout}>
           <ListItemIcon>
             <ExitToAppIcon />
           </ListItemIcon>

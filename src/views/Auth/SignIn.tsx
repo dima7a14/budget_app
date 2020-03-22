@@ -15,6 +15,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 import routes from 'router/routes';
 
+import PasswordField from 'components/PasswordField';
+
 import { useStyles } from './styles';
 
 
@@ -63,7 +65,7 @@ const SignIn: React.FC<IProps> = ({ loading, onSubmit }) => {
           onChange={formik.handleChange}
           value={formik.values.email}
         />
-        <TextField
+        <PasswordField
           variant="outlined"
           margin="normal"
           required

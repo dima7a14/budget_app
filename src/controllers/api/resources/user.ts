@@ -15,14 +15,14 @@ export interface IUser {
 
 export interface IUpdateError {
   email?: string[];
-  password?: string[];
+  password?: string[]; // TODO: remove this field.
   firstName?: string[];
   lastName?: string[];
 }
 
 export interface IUpdateData {
   email?: string;
-  password?: string;
+  password?: string; // TODO: remove this field.
   firstName?: string;
   lastName?: string;
 }

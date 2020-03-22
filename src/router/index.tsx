@@ -6,6 +6,7 @@ import Auth from 'views/Auth';
 import Accounts from 'views/Accounts';
 import Transactions from 'views/Transactions';
 import Reports from 'views/Reports';
+import Profile from 'views/Profile';
 import NotFound from 'views/NotFound';
 
 import routes from './routes';
@@ -18,6 +19,7 @@ export const Routes: React.FC = () => (
     <PrivateRoute path={routes.accounts.path}><Accounts /></PrivateRoute>
     <PrivateRoute path={routes.transactions.path}><Transactions /></PrivateRoute>
     <PrivateRoute path={routes.reports.path}><Reports /></PrivateRoute>
+    <PrivateRoute path={routes.profile.path}><Profile /></PrivateRoute>
     <Route path="*"><NotFound /></Route>
   </Switch>
 );

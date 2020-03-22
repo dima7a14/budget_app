@@ -28,5 +28,10 @@ export default {
     name: 'reports',
     path: '/reports',
     title: 'Reports'
-  }
+  },
+  profile: {
+    name: 'profile',
+    path: '/profile',
+    title: 'Profile',
+  },
 };

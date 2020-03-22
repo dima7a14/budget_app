@@ -15,6 +15,8 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import routes from 'router/routes';
 
+import PasswordField from 'components/PasswordField';
+
 import { useStyles } from './styles';
 
 
@@ -85,7 +87,7 @@ const SignUp: React.FC<IProps> = ({ loading, onSubmit }) => {
           value={formik.values.email}
           onChange={formik.handleChange}
         />
-        <TextField
+        <PasswordField
           variant="outlined"
           margin="normal"
           required
