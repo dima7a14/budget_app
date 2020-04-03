@@ -20,7 +20,7 @@ import { user } from 'stores/global';
 const SettingsButton: React.FC = () => {
   const history = useHistory();
   const userStore = useStore(user.$store);
-  const isAuthenticated = Boolean(userStore.refreshToken);
+  const isAuthenticated = Boolean(userStore.token);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -33,10 +33,10 @@ const SettingsButton: React.FC = () => {
     handleClose();
   };
   const logout = useCallback(async () => {
-    await user.api.logout({ refresh: userStore.refreshToken });
+    await user.api.logout({ refresh: userStore.token });
     history.push(routes.signIn.path);
     handleClose();
-  }, [userStore.refreshToken]);
+  }, [userStore.token]);
 
   if (!isAuthenticated) {
     return null;

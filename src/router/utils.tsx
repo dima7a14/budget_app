@@ -11,7 +11,7 @@ export const PrivateRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
   const isAuthenticated = useStoreMap({
     store: user.$store,
     keys: [],
-    fn: (u, []) => !!u.refreshToken,
+    fn: (u, []) => !!u.token,
   });
 
   return (
@@ -30,7 +30,7 @@ export const NotAuthenticatedRoute: React.FC<RouteProps> = ({ children, ...rest 
   const isAuthenticated = useStoreMap({
     store: user.$store,
     keys: [],
-    fn: u => !!u.refreshToken,
+    fn: u => !!u.token,
   });
 
   return (

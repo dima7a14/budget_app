@@ -22,7 +22,7 @@ import { useStyles } from './styles';
 
 interface IProps {
   loading: boolean;
-  onSubmit(params: { email: string, password: string }): any;
+  onSubmit(params: { email: string, password: string, remember: boolean }): any;
 }
 
 const SignIn: React.FC<IProps> = ({ loading, onSubmit }) => {
@@ -31,6 +31,7 @@ const SignIn: React.FC<IProps> = ({ loading, onSubmit }) => {
     initialValues: {
       email: '',
       password: '',
+      remember: false,
     },
     onSubmit,
   });
@@ -78,7 +79,14 @@ const SignIn: React.FC<IProps> = ({ loading, onSubmit }) => {
           onChange={formik.handleChange}
           value={formik.values.password}
         />
-        <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+        <FormControlLabel
+          control={<Checkbox value="remember" color="primary" />}
+          label="Remember me"
+          name="remember"
+          id="remember"
+          onChange={formik.handleChange}
+          value={formik.values.remember}
+        />
         <Button
           type="submit"
           fullWidth

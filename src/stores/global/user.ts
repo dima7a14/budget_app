@@ -1,7 +1,8 @@
 import { createStore, createEffect } from 'effector';
 
+import storage from 'controllers/storage';
 import api from 'controllers/api';
-import { ITokens, IRegisterError } from 'controllers/api/resources/auth';
+import { IRegisterError } from 'controllers/api/resources/auth';
 import {
   IUser as IApiUser,
   IUpdateError,
@@ -11,8 +12,7 @@ import {
 
 export interface IUser extends IApiUser {
   loading: boolean;
-  accessToken: string;
-  refreshToken: string;
+  token: string;
 }
 
 const initialUser: IUser = {
@@ -25,8 +25,7 @@ const initialUser: IUser = {
   createdAt: '',
   updatedAt: '',
   loading: false,
-  accessToken: '',
-  refreshToken: '',
+  token: '',
 };
 
 export interface IRegisterData {
@@ -34,22 +33,27 @@ export interface IRegisterData {
   password: string;
   firstName: string;
   lastName: string;
+  remember: boolean;
 }
 
 export interface IUpdateData extends IApiUpdateData {
   id: number;
 }
 
-export function createUserApi(initial: IUser = initialUser) {
+export function createUserApi(cachedUser: IUser = initialUser) {
   const loginFx = createEffect<
-    { email: string, password: string },
-    ITokens | undefined,
+    { email: string, password: string, remember: boolean },
+    string | undefined,
     IRegisterError
   >('Login user', {
-    handler: async ({ email, password }) => {
+    handler: async ({ email, password, remember }) => {
       const tokens = await api.auth.login(email, password);
 
-      return tokens;
+      if (typeof tokens !== 'undefined') {
+        storage.cacheData(remember);
+
+        return tokens.access;
+      }
     },
   });
 
@@ -59,13 +63,21 @@ export function createUserApi(initial: IUser = initialUser) {
     },
   });
 
-  const registerFx = createEffect<IRegisterData, ITokens | undefined, IRegisterError>('Register user', {
-    handler: async ({ email, password, firstName, lastName }) => {
+  const registerFx = createEffect<
+    IRegisterData,
+    string | undefined,
+    IRegisterError
+  >('Register user', {
+    handler: async ({ email, password, firstName, lastName, remember }) => {
       await api.auth.register(email, password, firstName, lastName);
 
       const tokens = await api.auth.login(email, password);
 
-      return tokens;
+      if (typeof tokens !== 'undefined') {
+        storage.cacheData(remember);
+
+        return tokens.access;
+      }
     },
   });
 
@@ -85,12 +97,12 @@ export function createUserApi(initial: IUser = initialUser) {
     },
   });
 
-  const $user = createStore<IUser>(initial)
+  const $user = createStore<IUser>(cachedUser)
     .on(loginFx.pending, (state, loading) => ({ ...state, loading }))
     .on(loginFx.done, (state, { result }) => {
       if (typeof result !== 'undefined') {
 
-        return { ...state, accessToken: result.access, refreshToken: result.refresh };
+        return { ...state, token: result };
       }
     })
     .on(loginFx.fail, (state, { error }) => {
@@ -100,13 +112,13 @@ export function createUserApi(initial: IUser = initialUser) {
     })
 
     .on(logoutFx.pending, (state, loading) => ({ ...state, loading }))
-    .on(logoutFx.done, () => initial)
-    .on(logoutFx.fail, () => initial)
+    .on(logoutFx.done, () => initialUser)
+    .on(logoutFx.fail, () => initialUser)
 
     .on(registerFx.pending, (state, loading) => ({ ...state, loading }))
     .on(registerFx.done, (state, { result }) => {
       if (typeof result !== 'undefined') {
-        return { ...state, accessToken: result.access, refreshToken: result.refresh };
+        return { ...state, token: result };
       }
     })
     .on(registerFx.fail, (state, { error }) => {

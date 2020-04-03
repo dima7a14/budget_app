@@ -27,6 +27,7 @@ interface IProps {
     password: string;
     firstName: string;
     lastName: string;
+    remember: boolean;
   }): any;
 }
 
@@ -37,11 +38,12 @@ const SignUp: React.FC<IProps> = ({ loading, onSubmit }) => {
       userName: '',
       email: '',
       password: '',
+      remember: false,
     },
-    onSubmit: ({ userName, email, password }) => {
+    onSubmit: ({ userName, email, password, remember }) => {
       const [firstName, lastName] = userName.split(' ');
 
-      onSubmit({ email, password, firstName, lastName });
+      onSubmit({ email, password, firstName, lastName, remember });
     },
   });
 
@@ -100,7 +102,14 @@ const SignUp: React.FC<IProps> = ({ loading, onSubmit }) => {
           value={formik.values.password}
           onChange={formik.handleChange}
         />
-        <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+        <FormControlLabel
+          control={<Checkbox value="remember" color="primary" />}
+          label="Remember me"
+          name="remember"
+          id="remember"
+          value={formik.values.remember}
+          onChange={formik.handleChange}
+        />
         <Button
           type="submit"
           fullWidth

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
-import { useStoreMap } from 'effector-react';
+import { useStoreMap, useStore } from 'effector-react';
 
 import routes from 'router/routes';
 
@@ -15,12 +15,8 @@ import { useStyles } from './styles';
 const Auth: React.FC = () => {
   const location = useLocation();
   const classes = useStyles();
-  const isLoading = useStoreMap({
-    store: user.$store,
-    keys: [],
-    fn: (u, []) => u.loading,
-  });
-  const login = useCallback(async (params: { email: string, password: string }) => {
+  const userStore = useStore(user.$store);
+  const login = useCallback(async (params: { email: string, password: string, remember: boolean }) => {
     await user.api.login(params);
     await user.api.get();
   }, []);
@@ -42,7 +38,7 @@ const Auth: React.FC = () => {
           exitActive: classes.signInExitActive,
         }}
       >
-        <SignIn loading={isLoading} onSubmit={login} />
+        <SignIn loading={userStore.loading} onSubmit={login} />
       </CSSTransition>
       <CSSTransition
         in={location.pathname === routes.signUp.path}
@@ -55,7 +51,7 @@ const Auth: React.FC = () => {
           exitActive: classes.signUpExitActive,
         }}
       >
-        <SignUp loading={isLoading} onSubmit={register} />
+        <SignUp loading={userStore.loading} onSubmit={register} />
       </CSSTransition>
     </div>
   );
