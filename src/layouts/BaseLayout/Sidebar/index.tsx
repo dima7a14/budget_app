@@ -18,7 +18,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 import routes from 'router/routes';
 
-import { user } from 'stores/global';
+import globalStore from 'stores/global';
 
 import { useStyles } from './styles';
 
@@ -54,7 +54,7 @@ const Sidebar: React.FC<IProps> = ({ open, onToggle }) => {
   const history = useHistory();
   const location = useLocation();
   const { firstName, lastName, isAuthenticated } = useStoreMap({
-    store: user.$store,
+    store: globalStore.user.$store,
     keys: [],
     fn: u => ({
       firstName: u.firstName,

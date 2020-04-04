@@ -5,7 +5,7 @@ import { useStoreMap, useStore } from 'effector-react';
 
 import routes from 'router/routes';
 
-import { user } from 'stores/global';
+import globalStore from 'stores/global';
 import { IRegisterData } from 'stores/global/user';
 
 import SignIn from './SignIn';
@@ -15,14 +15,14 @@ import { useStyles } from './styles';
 const Auth: React.FC = () => {
   const location = useLocation();
   const classes = useStyles();
-  const userStore = useStore(user.$store);
+  const userStore = useStore(globalStore.user.$store);
   const login = useCallback(async (params: { email: string, password: string, remember: boolean }) => {
-    await user.api.login(params);
-    await user.api.get();
+    await globalStore.user.api.login(params);
+    await globalStore.user.api.get();
   }, []);
   const register = useCallback(async (params: IRegisterData) => {
-    await user.api.register(params);
-    await user.api.get();
+    await globalStore.user.api.register(params);
+    await globalStore.user.api.get();
   }, []);
 
   return (

@@ -9,6 +9,8 @@ import {
   IUpdateData as IApiUpdateData,
 } from 'controllers/api/resources/user';
 
+import { IGlobalStore } from './index';
+
 
 export interface IUser extends IApiUser {
   loading: boolean;
@@ -40,7 +42,7 @@ export interface IUpdateData extends IApiUpdateData {
   id: number;
 }
 
-export function createUserApi(cachedUser: IUser = initialUser) {
+export function createUserApi(rootStore: IGlobalStore, cachedUser: IUser = initialUser) {
   const loginFx = createEffect<
     { email: string, password: string, remember: boolean },
     string | undefined,

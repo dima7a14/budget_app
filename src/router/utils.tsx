@@ -4,14 +4,14 @@ import { useStoreMap } from 'effector-react';
 
 import routes from './routes';
 
-import { user } from 'stores/global';
+import globalStore from 'stores/global';
 
 
 export const PrivateRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
   const isAuthenticated = useStoreMap({
-    store: user.$store,
+    store: globalStore.user.$store,
     keys: [],
-    fn: (u, []) => !!u.token,
+    fn: u => !!u.token,
   });
 
   return (
@@ -28,7 +28,7 @@ export const PrivateRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
 
 export const NotAuthenticatedRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
   const isAuthenticated = useStoreMap({
-    store: user.$store,
+    store: globalStore.user.$store,
     keys: [],
     fn: u => !!u.token,
   });

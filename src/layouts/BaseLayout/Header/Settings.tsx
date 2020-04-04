@@ -14,12 +14,12 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import routes from 'router/routes';
 
-import { user } from 'stores/global';
+import globalStore from 'stores/global';
 
 
 const SettingsButton: React.FC = () => {
   const history = useHistory();
-  const userStore = useStore(user.$store);
+  const userStore = useStore(globalStore.user.$store);
   const isAuthenticated = Boolean(userStore.token);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -33,7 +33,7 @@ const SettingsButton: React.FC = () => {
     handleClose();
   };
   const logout = useCallback(async () => {
-    await user.api.logout({ refresh: userStore.token });
+    await globalStore.user.api.logout({ refresh: userStore.token });
     history.push(routes.signIn.path);
     handleClose();
   }, [userStore.token]);

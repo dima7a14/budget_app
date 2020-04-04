@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-import { user } from 'stores/global';
+import globalStore from 'stores/global';
 
 import PasswordField from 'components/PasswordField';
 
@@ -16,7 +16,7 @@ import { useStyles } from './styles';
 
 const Profile: React.FC = () => {
   const classes = useStyles();
-  const userStore = useStore(user.$store);
+  const userStore = useStore(globalStore.user.$store);
   const formik = useFormik({
     initialValues: {
       email: userStore.email,
@@ -27,7 +27,7 @@ const Profile: React.FC = () => {
     onSubmit: async ({ email, userName, oldPassword, newPassword }) => {
       const [firstName, lastName] = userName.trim().split(' ');
 
-      await user.api.update({ id: userStore.id, firstName, lastName, email });
+      await globalStore.user.api.update({ id: userStore.id, firstName, lastName, email });
       formik.resetForm({
         values: {
           email: userStore.email,
