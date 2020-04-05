@@ -8,7 +8,7 @@ export function handleError<F extends {}>(error: any) {
       const { data } = error.response;
       console.error('Error from API - ', data);
 
-      return data as F;
+      throw data as F;
     }
   }
   throw error;

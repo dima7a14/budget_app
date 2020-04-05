@@ -103,28 +103,43 @@ export function createUserApi(rootStore: IGlobalStore, cachedUser: IUser = initi
     .on(loginFx.pending, (state, loading) => ({ ...state, loading }))
     .on(loginFx.done, (state, { result }) => {
       if (typeof result !== 'undefined') {
+        rootStore.app.api.show({ text: 'Logged in', variant: 'success' });
 
         return { ...state, token: result };
       }
     })
     .on(loginFx.fail, (state, { error }) => {
-      console.log(error);
+      Object.values(error).forEach((err: string) => {
+        rootStore.app.api.show({ text: err, variant: 'error' });
+      });
 
-      return state;
+      return initialUser;
     })
 
     .on(logoutFx.pending, (state, loading) => ({ ...state, loading }))
-    .on(logoutFx.done, () => initialUser)
-    .on(logoutFx.fail, () => initialUser)
+    .on(logoutFx.done, () => {
+      rootStore.app.api.show({ text: 'Logged out' });
+
+      return initialUser;
+    })
+    .on(logoutFx.fail, () => {
+      rootStore.app.api.show({ text: 'Logged out' });
+
+      return initialUser;
+    })
 
     .on(registerFx.pending, (state, loading) => ({ ...state, loading }))
     .on(registerFx.done, (state, { result }) => {
       if (typeof result !== 'undefined') {
+        rootStore.app.api.show({ text: 'Signed up', variant: 'success' });
+
         return { ...state, token: result };
       }
     })
     .on(registerFx.fail, (state, { error }) => {
-      console.log(error);
+      Object.values(error).forEach((err: string) => {
+        rootStore.app.api.show({ text: err, variant: 'error' });
+      });
 
       return state;
     })
@@ -136,7 +151,9 @@ export function createUserApi(rootStore: IGlobalStore, cachedUser: IUser = initi
       }
     })
     .on(detailFx.fail, (state, { error }) => {
-      console.log(error);
+      Object.values(error).forEach((err: string) => {
+        rootStore.app.api.show({ text: err, variant: 'error' });
+      });
 
       return state;
     })
@@ -144,11 +161,15 @@ export function createUserApi(rootStore: IGlobalStore, cachedUser: IUser = initi
     .on(updateFx.pending, (state, loading) => ({ ...state, loading }))
     .on(updateFx.done, (state, { result }) => {
       if (typeof result !== 'undefined') {
+        rootStore.app.api.show({ text: 'Updated', variant: 'success' });
+
         return { ...state, ...result };
       }
     })
     .on(updateFx.fail, (state, { error }) => {
-      console.log(error);
+      Object.values(error).forEach((err: string) => {
+        rootStore.app.api.show({ text: err, variant: 'error' });
+      });
 
       return state;
     })
