@@ -15,16 +15,18 @@ class GlobalStore implements IGlobalStore {
 
   constructor() {
     this.app = createAppApi(this);
-    this.user = createUserApi(this, storage.load().user);
+    this.user = createUserApi(this, storage.load().token);
+
+
 
     this.initWatchers();
   }
 
   private initWatchers() {
     // Save all user data in the storage.
-    this.user.$store.watch(state => {
-      storage.save({ user: state });
-    });
+    // this.user.$store.watch(state => {
+    //   storage.save({ user: state });
+    // });
 
     const debug = process.env.NODE_ENV === 'development';
 

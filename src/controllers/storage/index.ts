@@ -1,10 +1,5 @@
-import merge from 'lodash/merge';
-
-import { IUser } from 'stores/global/user';
-
-
 export interface IStorage {
-  user?: IUser;
+  token?: string;
 }
 
 const DEFAULT_DATA: IStorage = {};
@@ -19,7 +14,7 @@ class AppStorage {
     this.storageInstance = !!localStorage.getItem(this.key) ? localStorage : sessionStorage;
   }
 
-  public cacheData(value: boolean) {
+  public enableCaching(value: boolean) {
     this.storageInstance = value ? localStorage : sessionStorage;
   }
 
@@ -27,7 +22,7 @@ class AppStorage {
     try {
       const data: IStorage = JSON.parse(this.storageInstance.getItem(this.key) || 'null') || {};
 
-      return merge({}, DEFAULT_DATA, data);
+      return { ...DEFAULT_DATA, ...data };
     } catch (err) {
       console.error(err);
       return DEFAULT_DATA;
@@ -37,7 +32,7 @@ class AppStorage {
   public save(data: IStorage) {
     try {
       const currentData = this.load();
-      this.storageInstance.setItem(this.key, JSON.stringify(merge(currentData, data)));
+      this.storageInstance.setItem(this.key, JSON.stringify({ ...currentData, ...data }));
     } catch (err) {
       console.error(err);
     }

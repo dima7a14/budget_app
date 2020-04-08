@@ -1,5 +1,6 @@
 import React from 'react';
 import { withSnackbar, WithSnackbarProps } from 'notistack';
+import isEqual from 'lodash/isEqual';
 
 import { IMessage } from 'stores/global/app';
 
@@ -13,8 +14,11 @@ class SystemSnackbar extends React.PureComponent<IProps> {
     message: undefined,
   };
 
-  componentDidUpdate() {
-    if (typeof this.props.message !== 'undefined') {
+  componentDidUpdate(prevProps: IProps) {
+    if (
+      typeof this.props.message !== 'undefined' &&
+      !isEqual(this.props.message, prevProps.message)
+    ) {
       this.props.enqueueSnackbar(this.props.message.text, { variant: this.props.message.variant });
     }
   }

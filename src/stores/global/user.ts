@@ -42,7 +42,7 @@ export interface IUpdateData extends IApiUpdateData {
   id: number;
 }
 
-export function createUserApi(rootStore: IGlobalStore, cachedUser: IUser = initialUser) {
+export function createUserApi(rootStore: IGlobalStore, token = '') {
   const loginFx = createEffect<
     { email: string, password: string, remember: boolean },
     string | undefined,
@@ -52,17 +52,40 @@ export function createUserApi(rootStore: IGlobalStore, cachedUser: IUser = initi
       const tokens = await api.auth.login(email, password);
 
       if (typeof tokens !== 'undefined') {
-        storage.cacheData(remember);
+        storage.enableCaching(remember);
 
         return tokens.access;
       }
     },
   });
 
+  loginFx.done.watch(({ result }) => {
+    if (typeof result !== 'undefined') {
+      rootStore.app.api.show({ text: 'Logged in', variant: 'success' });
+      storage.save({ token: result });
+    }
+  });
+
+  loginFx.fail.watch(({ error }) => {
+    Object.values(error).forEach((err: string) => {
+      rootStore.app.api.show({ text: err, variant: 'error' });
+    });
+  });
+
   const logoutFx = createEffect<{ refresh: string }, void, Error>('Logout user', {
     handler: async ({ refresh }) => {
       await api.auth.logout(refresh);
     },
+  });
+
+  logoutFx.done.watch(() => {
+    storage.save({ token: undefined });
+    rootStore.app.api.show({ text: 'Logged out' });
+  });
+
+  logoutFx.fail.watch(() => {
+    storage.save({ token: undefined });
+    rootStore.app.api.show({ text: 'Logged out' });
   });
 
   const registerFx = createEffect<
@@ -76,11 +99,24 @@ export function createUserApi(rootStore: IGlobalStore, cachedUser: IUser = initi
       const tokens = await api.auth.login(email, password);
 
       if (typeof tokens !== 'undefined') {
-        storage.cacheData(remember);
+        storage.enableCaching(remember);
 
         return tokens.access;
       }
     },
+  });
+
+  registerFx.done.watch(({ result }) => {
+    if (typeof result !== 'undefined') {
+      rootStore.app.api.show({ text: 'Signed up', variant: 'success' });
+      storage.save({ token: result });
+    }
+  });
+
+  registerFx.fail.watch(({ error }) => {
+    Object.values(error).forEach((err: string) => {
+      rootStore.app.api.show({ text: err, variant: 'error' });
+    });
   });
 
   const detailFx = createEffect<void, IApiUser | undefined, Error>('Detail user', {
@@ -91,6 +127,12 @@ export function createUserApi(rootStore: IGlobalStore, cachedUser: IUser = initi
     },
   });
 
+  detailFx.fail.watch(({ error }) => {
+    Object.values(error).forEach((err: string) => {
+      rootStore.app.api.show({ text: err, variant: 'error' });
+    });
+  });
+
   const updateFx = createEffect<IUpdateData, IApiUser | undefined, IUpdateError>('Update user', {
     handler: async ({ id, ...rest }) => {
       const data = await api.user.update(id, rest);
@@ -99,50 +141,38 @@ export function createUserApi(rootStore: IGlobalStore, cachedUser: IUser = initi
     },
   });
 
-  const $user = createStore<IUser>(cachedUser)
+  updateFx.done.watch(({ result }) => {
+    if (typeof result !== 'undefined') {
+      rootStore.app.api.show({ text: 'Updated', variant: 'success' });
+    }
+  });
+
+  updateFx.fail.watch(({ error }) => {
+    Object.values(error).forEach((err: string) => {
+      rootStore.app.api.show({ text: err, variant: 'error' });
+    });
+  });
+
+  const $user = createStore<IUser>({ ...initialUser, token })
     .on(loginFx.pending, (state, loading) => ({ ...state, loading }))
     .on(loginFx.done, (state, { result }) => {
       if (typeof result !== 'undefined') {
-        rootStore.app.api.show({ text: 'Logged in', variant: 'success' });
-
         return { ...state, token: result };
       }
     })
-    .on(loginFx.fail, (state, { error }) => {
-      Object.values(error).forEach((err: string) => {
-        rootStore.app.api.show({ text: err, variant: 'error' });
-      });
-
-      return initialUser;
-    })
+    .on(loginFx.fail, () => initialUser)
 
     .on(logoutFx.pending, (state, loading) => ({ ...state, loading }))
-    .on(logoutFx.done, () => {
-      rootStore.app.api.show({ text: 'Logged out' });
-
-      return initialUser;
-    })
-    .on(logoutFx.fail, () => {
-      rootStore.app.api.show({ text: 'Logged out' });
-
-      return initialUser;
-    })
+    .on(logoutFx.done, () => initialUser)
+    .on(logoutFx.fail, () => initialUser)
 
     .on(registerFx.pending, (state, loading) => ({ ...state, loading }))
     .on(registerFx.done, (state, { result }) => {
       if (typeof result !== 'undefined') {
-        rootStore.app.api.show({ text: 'Signed up', variant: 'success' });
-
         return { ...state, token: result };
       }
     })
-    .on(registerFx.fail, (state, { error }) => {
-      Object.values(error).forEach((err: string) => {
-        rootStore.app.api.show({ text: err, variant: 'error' });
-      });
-
-      return state;
-    })
+    .on(registerFx.fail, () => initialUser)
 
     .on(detailFx.pending, (state, loading) => ({ ...state, loading }))
     .on(detailFx.done, (state, { result }) => {
@@ -150,29 +180,22 @@ export function createUserApi(rootStore: IGlobalStore, cachedUser: IUser = initi
         return { ...state, ...result };
       }
     })
-    .on(detailFx.fail, (state, { error }) => {
-      Object.values(error).forEach((err: string) => {
-        rootStore.app.api.show({ text: err, variant: 'error' });
-      });
-
-      return state;
-    })
+    .on(detailFx.fail, () => initialUser)
 
     .on(updateFx.pending, (state, loading) => ({ ...state, loading }))
     .on(updateFx.done, (state, { result }) => {
       if (typeof result !== 'undefined') {
-        rootStore.app.api.show({ text: 'Updated', variant: 'success' });
-
         return { ...state, ...result };
       }
     })
-    .on(updateFx.fail, (state, { error }) => {
-      Object.values(error).forEach((err: string) => {
-        rootStore.app.api.show({ text: err, variant: 'error' });
-      });
+    .on(updateFx.fail, () => initialUser);
 
-      return state;
-    })
+  // Check if need to fetch user
+  const state = $user.getState();
+  if (state.token && !state.id) {
+    api.setToken(state.token);
+    detailFx();
+  }
 
   return {
     $store: $user,

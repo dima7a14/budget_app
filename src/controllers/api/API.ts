@@ -74,6 +74,14 @@ class API implements IAPI {
     this.prepareRequests();
     this.prepareResponses();
   }
+
+  public setToken(token: string) {
+    if (token) {
+      this.instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+    } else {
+      this.instance.defaults.headers.common.Authorization = '';
+    }
+  }
 }
 
 
