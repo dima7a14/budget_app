@@ -29,13 +29,13 @@ const SettingsButton: React.FC = () => {
     setAnchorEl(null);
   };
   const toProfile = () => {
-    history.push(routes.profile.path);
     handleClose();
+    history.push(routes.profile.path);
   };
   const logout = useCallback(async () => {
+    handleClose();
     await globalStore.user.api.logout({ refresh: userStore.token });
     history.push(routes.signIn.path);
-    handleClose();
   }, [userStore.token]);
 
   if (!isAuthenticated) {
