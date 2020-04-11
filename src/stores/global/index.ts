@@ -1,5 +1,7 @@
 import storage from 'controllers/storage';
 
+import Logger from '../logger';
+
 import { createAppApi } from './app';
 import { createUserApi } from './user';
 
@@ -23,16 +25,14 @@ class GlobalStore implements IGlobalStore {
   }
 
   private initWatchers() {
-    // Save all user data in the storage.
-    // this.user.$store.watch(state => {
-    //   storage.save({ user: state });
-    // });
-
     const debug = process.env.NODE_ENV === 'development';
 
-    if (debug) { // TODO: mb implement fancy debug messages?
-      this.app.$store.watch(console.log);
-      this.user.$store.watch(console.log);
+    if (debug) {
+      const appLogger = new Logger('App', false);
+      const userLogger = new Logger('User', false);
+
+      this.app.$store.watch(state => appLogger.log(state));
+      this.user.$store.watch(state => userLogger.log(state));
     }
   }
 }
