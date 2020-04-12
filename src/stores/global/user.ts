@@ -7,7 +7,7 @@ import {
   IUser as IApiUser,
   IUpdateError,
   IUpdateData as IApiUpdateData,
-} from 'controllers/api/resources/user';
+} from 'controllers/api/resources/users';
 
 import { IGlobalStore } from './index';
 
@@ -121,7 +121,7 @@ export function createUserApi(rootStore: IGlobalStore, token = '') {
 
   const detailFx = createEffect<void, IApiUser | undefined, Error>('Detail user', {
     handler: async () => {
-      const data = await api.user.get();
+      const data = await api.users.get();
 
       return data;
     },
@@ -135,7 +135,7 @@ export function createUserApi(rootStore: IGlobalStore, token = '') {
 
   const updateFx = createEffect<IUpdateData, IApiUser | undefined, IUpdateError>('Update user', {
     handler: async ({ id, ...rest }) => {
-      const data = await api.user.update(id, rest);
+      const data = await api.users.update(id, rest);
 
       return data;
     },

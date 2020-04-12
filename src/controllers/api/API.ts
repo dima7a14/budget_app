@@ -5,14 +5,14 @@ import { camelizeKeys, decamelizeKeys } from 'humps';
 import { getPath } from './config';
 
 import Auth from './resources/auth';
-import User from './resources/user';
+import Users from './resources/users';
 import Accounts from './resources/accounts';
 
 
 interface IAPI {
   // TODO: add other resources.
   auth: Auth;
-  user: User;
+  users: Users;
   accounts: Accounts;
   // category: Category;
   instance: AxiosInstance;
@@ -23,7 +23,7 @@ class API implements IAPI {
   instance: AxiosInstance;
 
   auth: Auth;
-  user: User;
+  users: Users;
   accounts: Accounts;
 
   constructor() {
@@ -33,7 +33,7 @@ class API implements IAPI {
     this.prepareInstance();
 
     this.auth = new Auth(this.instance);
-    this.user = new User(this.instance);
+    this.users = new Users(this.instance);
     this.accounts = new Accounts(this.instance);
     // TODO: Init other resources...
   }

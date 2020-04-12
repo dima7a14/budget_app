@@ -27,7 +27,7 @@ export interface IUpdateData {
   lastName?: string;
 }
 
-class User implements IResource {
+class Users implements IResource {
   prefix: string;
   instance: AxiosInstance;
 
@@ -58,4 +58,4 @@ class User implements IResource {
   }
 }
 
-export default User;
+export default Users;
