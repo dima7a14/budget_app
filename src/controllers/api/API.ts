@@ -6,13 +6,14 @@ import { getPath } from './config';
 
 import Auth from './resources/auth';
 import User from './resources/user';
+import Accounts from './resources/accounts';
 
 
 interface IAPI {
   // TODO: add other resources.
   auth: Auth;
   user: User;
-  // account: Account;
+  accounts: Accounts;
   // category: Category;
   instance: AxiosInstance;
 }
@@ -23,6 +24,7 @@ class API implements IAPI {
 
   auth: Auth;
   user: User;
+  accounts: Accounts;
 
   constructor() {
     this.baseURL = getPath();
@@ -32,6 +34,7 @@ class API implements IAPI {
 
     this.auth = new Auth(this.instance);
     this.user = new User(this.instance);
+    this.accounts = new Accounts(this.instance);
     // TODO: Init other resources...
   }
 
