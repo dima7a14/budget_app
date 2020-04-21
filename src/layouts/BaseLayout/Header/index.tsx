@@ -24,7 +24,7 @@ interface IProps {
 const Header: React.FC<IProps> = ({ opened, title, onToggle }) => {
   const classes = useStyles();
   const userStore = useStore(globalStore.user.$store);
-  const isAuthenticated = Boolean(userStore.token);
+  const isAuthenticated = Boolean(userStore.tokens.access);
 
   return (
     <AppBar

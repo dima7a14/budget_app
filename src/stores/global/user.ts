@@ -2,7 +2,8 @@ import { createStore, createEffect } from 'effector';
 
 import storage from 'controllers/storage';
 import api from 'controllers/api';
-import { IRegisterError } from 'controllers/api/resources/auth';
+import { IBaseError } from 'controllers/api/common';
+import { IRegisterError, ITokens } from 'controllers/api/resources/auth';
 import {
   IUser as IApiUser,
   IUpdateError,
@@ -14,7 +15,7 @@ import { IGlobalStore } from './index';
 
 export interface IUser extends IApiUser {
   loading: boolean;
-  token: string;
+  tokens: ITokens;
 }
 
 const initialUser: IUser = {
@@ -27,7 +28,10 @@ const initialUser: IUser = {
   createdAt: '',
   updatedAt: '',
   loading: false,
-  token: '',
+  tokens: {
+    access: '',
+    refresh: '',
+  },
 };
 
 export interface IRegisterData {
@@ -42,10 +46,13 @@ export interface IUpdateData extends IApiUpdateData {
   id: number;
 }
 
-export function createUserApi(rootStore: IGlobalStore, token = '') {
+export function createUserApi(
+  rootStore: IGlobalStore,
+  tokens: ITokens = { access: '', refresh: '' },
+) {
   const loginFx = createEffect<
     { email: string, password: string, remember: boolean },
-    string | undefined,
+    ITokens | undefined,
     IRegisterError
   >('Login user', {
     handler: async ({ email, password, remember }) => {
@@ -54,7 +61,7 @@ export function createUserApi(rootStore: IGlobalStore, token = '') {
       if (typeof tokens !== 'undefined') {
         storage.enableCaching(remember);
 
-        return tokens.access;
+        return tokens;
       }
     },
   });
@@ -62,7 +69,7 @@ export function createUserApi(rootStore: IGlobalStore, token = '') {
   loginFx.done.watch(({ result }) => {
     if (typeof result !== 'undefined') {
       rootStore.app.api.show({ text: 'Logged in', variant: 'success' });
-      storage.save({ token: result });
+      storage.save({ tokens: result });
     }
   });
 
@@ -79,18 +86,18 @@ export function createUserApi(rootStore: IGlobalStore, token = '') {
   });
 
   logoutFx.done.watch(() => {
-    storage.save({ token: undefined });
+    storage.save({ tokens: { access: '', refresh: '' } });
     rootStore.app.api.show({ text: 'Logged out' });
   });
 
   logoutFx.fail.watch(() => {
-    storage.save({ token: undefined });
+    storage.save({ tokens: { access: '', refresh: '' } });
     rootStore.app.api.show({ text: 'Logged out' });
   });
 
   const registerFx = createEffect<
     IRegisterData,
-    string | undefined,
+    ITokens | undefined,
     IRegisterError
   >('Register user', {
     handler: async ({ email, password, firstName, lastName, remember }) => {
@@ -101,7 +108,7 @@ export function createUserApi(rootStore: IGlobalStore, token = '') {
       if (typeof tokens !== 'undefined') {
         storage.enableCaching(remember);
 
-        return tokens.access;
+        return tokens;
       }
     },
   });
@@ -109,7 +116,7 @@ export function createUserApi(rootStore: IGlobalStore, token = '') {
   registerFx.done.watch(({ result }) => {
     if (typeof result !== 'undefined') {
       rootStore.app.api.show({ text: 'Signed up', variant: 'success' });
-      storage.save({ token: result });
+      storage.save({ tokens: result });
     }
   });
 
@@ -119,7 +126,7 @@ export function createUserApi(rootStore: IGlobalStore, token = '') {
     });
   });
 
-  const detailFx = createEffect<void, IApiUser | undefined, Error>('Detail user', {
+  const detailFx = createEffect<void, IApiUser | undefined, IBaseError>('Detail user', {
     handler: async () => {
       const data = await api.users.get();
 
@@ -128,9 +135,13 @@ export function createUserApi(rootStore: IGlobalStore, token = '') {
   });
 
   detailFx.fail.watch(({ error }) => {
-    Object.values(error).forEach((err: string) => {
-      rootStore.app.api.show({ text: err, variant: 'error' });
-    });
+    if (typeof error.detail !== 'undefined') {
+      rootStore.app.api.show({ text: error.detail, variant: 'error' });
+    } else {
+      Object.values(error).forEach((err: string) => {
+        rootStore.app.api.show({ text: err, variant: 'error' });
+      });
+    }
   });
 
   const updateFx = createEffect<IUpdateData, IApiUser | undefined, IUpdateError>('Update user', {
@@ -153,11 +164,11 @@ export function createUserApi(rootStore: IGlobalStore, token = '') {
     });
   });
 
-  const $user = createStore<IUser>({ ...initialUser, token })
+  const $user = createStore<IUser>({ ...initialUser, tokens })
     .on(loginFx.pending, (state, loading) => ({ ...state, loading }))
     .on(loginFx.done, (state, { result }) => {
       if (typeof result !== 'undefined') {
-        return { ...state, token: result };
+        return { ...state, tokens: result };
       }
     })
     .on(loginFx.fail, () => initialUser)
@@ -169,7 +180,7 @@ export function createUserApi(rootStore: IGlobalStore, token = '') {
     .on(registerFx.pending, (state, loading) => ({ ...state, loading }))
     .on(registerFx.done, (state, { result }) => {
       if (typeof result !== 'undefined') {
-        return { ...state, token: result };
+        return { ...state, tokens: result };
       }
     })
     .on(registerFx.fail, () => initialUser)
@@ -192,8 +203,8 @@ export function createUserApi(rootStore: IGlobalStore, token = '') {
 
   // Check if need to fetch user
   const state = $user.getState();
-  if (state.token && !state.id) {
-    api.setToken(state.token);
+  if (state.tokens.access && !state.id) {
+    api.setTokens(state.tokens);
     detailFx();
   }
 

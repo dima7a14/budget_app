@@ -1,5 +1,8 @@
 export interface IStorage {
-  token?: string;
+  tokens?: {
+    access: string;
+    refresh: string;
+  };
 }
 
 const DEFAULT_DATA: IStorage = {};

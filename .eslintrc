@@ -6,7 +6,6 @@
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended"
   ],
-//  "parser": "@typescript-eslint/parser",
   "parser": "babel-eslint",
   "plugins": ["prettier", "@typescript-eslint"],
   "rules": {

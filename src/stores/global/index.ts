@@ -17,7 +17,7 @@ class GlobalStore implements IGlobalStore {
 
   constructor() {
     this.app = createAppApi(this);
-    this.user = createUserApi(this, storage.load().token);
+    this.user = createUserApi(this, storage.load().tokens);
 
 
 
@@ -28,8 +28,8 @@ class GlobalStore implements IGlobalStore {
     const debug = process.env.NODE_ENV === 'development';
 
     if (debug) {
-      const appLogger = new Logger('App', false);
-      const userLogger = new Logger('User', false);
+      const appLogger = new Logger('App', true);
+      const userLogger = new Logger('User', true);
 
       this.app.$store.watch(state => appLogger.log(state));
       this.user.$store.watch(state => userLogger.log(state));

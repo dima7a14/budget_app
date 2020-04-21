@@ -1,10 +1,12 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosError } from 'axios';
 import qs from 'qs';
 import { camelizeKeys, decamelizeKeys } from 'humps';
 
+import storage from 'controllers/storage';
+
 import { getPath } from './config';
 
-import Auth from './resources/auth';
+import Auth, { ITokens } from './resources/auth';
 import Users from './resources/users';
 import Accounts from './resources/accounts';
 import Categories from './resources/categories';
@@ -22,6 +24,7 @@ interface IAPI {
 
 class API implements IAPI {
   private baseURL: string;
+  private refreshToken: string;
   instance: AxiosInstance;
 
   auth: Auth;
@@ -31,6 +34,7 @@ class API implements IAPI {
 
   constructor() {
     this.baseURL = getPath();
+    this.refreshToken = '';
     this.instance = axios.create({ baseURL: this.baseURL });
 
     this.prepareInstance();
@@ -74,7 +78,28 @@ class API implements IAPI {
     this.instance.interceptors.response.use(response => ({
       ...response,
       data: camelizeKeys(response.data),
-    }));
+    }), async (error: AxiosError) => {
+      const originalRequest = error.config;
+
+      if (error.response?.status === 401 && !originalRequest.url?.includes(this.auth.refreshPath)) {
+        this.setTokens({ access: '', refresh: this.refreshToken });
+        const data = await this.auth.refresh(this.refreshToken);
+
+        if (data) {
+          this.refreshToken = data.refresh;
+          this.setTokens(data);
+          storage.save({ tokens: data });
+          originalRequest.headers['Authorization'] = `Bearer ${data.access}`;
+
+          return this.instance(originalRequest);
+        }
+      }
+
+      this.setTokens({ access: '', refresh: '' });
+      storage.save({ tokens: { access: '', refresh: '' } });
+
+      throw error;
+    });
   }
 
   private prepareInstance() {
@@ -82,12 +107,11 @@ class API implements IAPI {
     this.prepareResponses();
   }
 
-  public setToken(token: string) {
-    if (token) {
-      this.instance.defaults.headers.common.Authorization = `Bearer ${token}`;
-    } else {
-      this.instance.defaults.headers.common.Authorization = '';
-    }
+  public setTokens(tokens: ITokens) {
+    this.instance.defaults.headers.common.Authorization = tokens.access
+      ? `Bearer ${tokens.access}`
+      : '';
+    this.refreshToken = tokens.refresh || '';
   }
 }
 
