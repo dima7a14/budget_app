@@ -1,6 +1,7 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -46,7 +47,7 @@ const SignIn: React.FC<IProps> = ({ loading, onSubmit }) => {
           <CircularProgress />
         </div>
       </Fade>
-      <Avatar className={classes.signInAvatar}>
+      <Avatar className={classNames(classes.avatar, classes.signInAvatar)}>
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h2" variant="h5">

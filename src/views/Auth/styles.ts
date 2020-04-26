@@ -6,21 +6,36 @@ const formWidth = 300;
 
 export const useStyles = makeStyles(theme => ({
   paper: {
-    margin: theme.spacing(8),
-    padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     position: 'absolute',
-    left: `calc(50% - ${formWidth / 2}px)`,
-    maxWidth: formWidth,
+    [theme.breakpoints.down('sm')]: {
+      margin: theme.spacing(0, 2),
+      padding: theme.spacing(2),
+    },
+    [theme.breakpoints.up('sm')]: {
+      left: `calc(50% - ${formWidth / 2}px)`,
+      maxWidth: formWidth,
+      padding: theme.spacing(2),
+    },
+  },
+  avatar: {
+    [theme.breakpoints.down('sm')]: {
+      margin: 0,
+      width: theme.spacing(4),
+      height: theme.spacing(4),
+    },
+    [theme.breakpoints.up('sm')]: {
+      margin: theme.spacing(1),
+      width: theme.spacing(5),
+      height: theme.spacing(5),
+    },
   },
   signInAvatar: {
-    margin: theme.spacing(1),
     backgroundColor: theme.palette.warning.light,
   },
   signUpAvatar: {
-    margin: theme.spacing(1),
     backgroundColor: theme.palette.success.main,
   },
   form: {
@@ -28,6 +43,9 @@ export const useStyles = makeStyles(theme => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    [theme.breakpoints.down('sm')]: {
+      margin: theme.spacing(2, 0, 1),
+    },
   },
   link: {
     display: 'block',
@@ -43,6 +61,8 @@ export const useStyles = makeStyles(theme => ({
     position: 'relative',
     width: '100%',
     height: '100%',
+    display: 'flex',
+    alignItems: 'center',
   },
   signInEnter: {
     opacity: 0,

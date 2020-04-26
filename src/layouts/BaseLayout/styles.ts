@@ -1,7 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-import { sidebarWidth } from 'theme/dimensions';
-
 export const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
@@ -14,7 +12,9 @@ export const useStyles = makeStyles(theme => ({
     overflow: 'auto',
   },
   container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
+    height: `calc(100% - ${theme.spacing(7)}px)`,
+    [theme.breakpoints.up('sm')]: {
+      height: `calc(100% - ${theme.spacing(8)}px)`,
+    },
   },
 }));
