@@ -9,16 +9,16 @@ import { getPath } from './config';
 import Auth, { ITokens } from './resources/auth';
 import Users from './resources/users';
 import Accounts from './resources/accounts';
+import Transactions from './resources/transactions';
 import Categories from './resources/categories';
 
 
 interface IAPI {
-  // TODO: add other resources.
   auth: Auth;
   users: Users;
   accounts: Accounts;
+  transactions: Transactions;
   categories: Categories;
-  // category: Category;
   instance: AxiosInstance;
 }
 
@@ -30,6 +30,7 @@ class API implements IAPI {
   auth: Auth;
   users: Users;
   accounts: Accounts;
+  transactions: Transactions;
   categories: Categories;
 
   constructor() {
@@ -42,8 +43,8 @@ class API implements IAPI {
     this.auth = new Auth(this.instance);
     this.users = new Users(this.instance);
     this.accounts = new Accounts(this.instance);
+    this.transactions = new Transactions(this.instance);
     this.categories = new Categories(this.instance);
-    // TODO: Init other resources...
   }
 
   private prepareRequests() {
