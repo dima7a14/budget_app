@@ -15,12 +15,16 @@ import {
 export interface ITransaction {
   id: number;
   name: string;
+  description: string;
   createdAt: string;
   updatedAt: string;
   value: number;
   accountId: number;
   createdById: number;
-  categoryId: number | null;
+  categories: Array<{
+    id: number;
+    name: string;
+  }>;
 }
 
 export interface ITransactionError extends Partial<IBaseError> {

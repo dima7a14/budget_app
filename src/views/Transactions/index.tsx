@@ -1,47 +1,64 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+
+import Grid from '@material-ui/core/Grid';
+
+import { ITransaction } from 'controllers/api/resources/transactions';
 
 import Transaction from './Transaction';
-// import DefaultLayout from 'layouts/Default';
+import { useStyles } from './styles';
 
-// import Table from './Table';
-
-// const Transactions: React.FC = () => {
-//   return (
-//     <DefaultLayout>
-//       <Table />
-//     </DefaultLayout>
-//   );
-// };
-
-const transactions = [{
-  id: '1',
-  account: 'one',
-  categories: [],
-  amount: 24.25
-}, {
-  id: '2',
-  account: 'two',
-  categories: [],
-  amount: 0.5
-}, {
-  id: '3',
-  account: 'three',
-  categories: [],
-  amount: 69
-}];
+const dataMock: ITransaction[] = [
+  {
+    id: 1,
+    name: 'Transaction 1',
+    description: 'My first transaction. WOW!',
+    createdAt: '2020-02-29T13:35:56.084347Z',
+    updatedAt: '2020-02-29T13:35:56.084701Z',
+    value: 33,
+    accountId: 1,
+    createdById: 3,
+    categories: [
+      { id: 1, name: 'PC' },
+    ],
+  },
+  {
+    id: 2,
+    name: 'Transaction 2',
+    description: '',
+    createdAt: '2020-02-29T14:04:21.210568Z',
+    updatedAt: '2020-05-02T18:58:53.108372Z',
+    value: 19.5,
+    accountId: 1,
+    createdById: 3,
+    categories: [
+      { id: 1, name: 'PC' },
+      { id: 2, name: 'Electronics' },
+    ],
+  },
+  {
+    id: 3,
+    name: 'Transaction 3',
+    description: 'Very special transaction',
+    createdAt: '2020-10-30T06:22:49.210568Z',
+    updatedAt: '2020-10-31T10:03:21.210568Z',
+    value: 100,
+    accountId: 1,
+    createdById: 3,
+    categories: [],
+  },
+];
 
 const Transactions: React.FC = () => {
-  useEffect(() => {
-    // todo add load of transactions
-  });
+  const classes = useStyles();
 
   return (
-    <div>
-      Transactions
-      {transactions.map(t => (
-        <Transaction key={t.id} transaction={t} />
+    <Grid container spacing={3} className={classes.root}>
+      {dataMock.map(t => (
+        <Grid key={t.id} item xs={12} sm={6} md={4} lg={3}>
+          <Transaction data={t} />
+        </Grid>
       ))}
-    </div>
+    </Grid>
   );
 };
 
