@@ -10,8 +10,9 @@ import { useStyles } from './styles';
 const dataMock: ITransaction[] = [
   {
     id: 1,
+    read: false,
     name: 'Transaction 1',
-    description: 'My first transaction. WOW!',
+    description: 'My first transaction. WOW! My first transaction. WOW! My first transaction. WOW! My first transaction. WOW! My first transaction. WOW! My first transaction. WOW!',
     createdAt: '2020-02-29T13:35:56.084347Z',
     updatedAt: '2020-02-29T13:35:56.084701Z',
     value: 33,
@@ -23,6 +24,7 @@ const dataMock: ITransaction[] = [
   },
   {
     id: 2,
+    read: false,
     name: 'Transaction 2',
     description: '',
     createdAt: '2020-02-29T14:04:21.210568Z',
@@ -37,6 +39,7 @@ const dataMock: ITransaction[] = [
   },
   {
     id: 3,
+    read: true,
     name: 'Transaction 3',
     description: 'Very special transaction',
     createdAt: '2020-10-30T06:22:49.210568Z',

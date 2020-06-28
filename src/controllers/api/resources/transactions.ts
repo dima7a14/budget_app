@@ -14,6 +14,7 @@ import {
 
 export interface ITransaction {
   id: number;
+  read: boolean;
   name: string;
   description: string;
   createdAt: string;

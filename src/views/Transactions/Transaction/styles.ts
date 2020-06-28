@@ -5,6 +5,14 @@ export const useStyles = makeStyles(theme => ({
   root: {
     minWidth: 240,
   },
+  content: {
+    paddingBottom: 0,
+  },
+  name: {
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+  },
   datetime: {
     fontSize: 12,
   },
@@ -17,7 +25,8 @@ export const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(0.5),
     paddingLeft: 0,
     paddingRight: 0,
-    margin: 0,
+    marginTop: theme.spacing(2),
+    marginBottom: 0,
     '& > li': {
       marginLeft: theme.spacing(0.5),
       '&:first-child': {
@@ -27,5 +36,14 @@ export const useStyles = makeStyles(theme => ({
   },
   description: {
     padding: theme.spacing(1),
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+  },
+  cardButtons: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 }));
